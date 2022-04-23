@@ -1,0 +1,30 @@
+{
+  "name": "yireo/shopware6-app-template",
+  "description": "Some plugin description",
+  "type": "shopware-platform-plugin",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Yireo"
+    }
+  ],
+  "require": {
+    "shopware/core": "~6.4"
+  },
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Yireo\\AppTemplate\\": "src/"
+    }
+  },
+  "extra": {
+    "shopware-plugin-class": "Yireo\\AppTemplate\\YireoAppTemplate",
+    "copyright": "Yireo",
+    "label": {
+      "en-GB": "YireoAppTemplate"
+    },
+    "description": {
+      "en-GB": "Some plugin description"
+    }
+  }
+}
