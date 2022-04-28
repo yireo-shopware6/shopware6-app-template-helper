@@ -9,3 +9,8 @@ Normally, Twig templates are scanned during app installation and then copied int
 ```bash
 bin/console yireo:app-template:refresh SwagExample
 ```
+
+Or leave out the app name to refresh all templates of all apps:
+```bash
+bin/console yireo:app-template:refresh SwagExample
+```

@@ -40,32 +40,32 @@ class RefreshTemplatesCommand extends Command
     protected function configure()
     {
         $this->setDescription('Refresh app templates of specified app');
-        $this->addArgument('name', InputArgument::REQUIRED, 'App name');
+        $this->addArgument('name', InputArgument::OPTIONAL, 'App name');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $context = Context::createDefaultContext();
         $appName = $input->getArgument('name');
-        if (empty($appName)) {
-            $output->writeln('<error>No app name given</error>');
-            return 1;
-        }
 
         $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('name', $appName));
+        if ($appName) {
+            $criteria->addFilter(new EqualsFilter('name', $appName));
+        }
+
         $apps = $this->entityRepository->search($criteria, $context);
 
-        if (count($apps) !== 1) {
-            $output->writeln('<error>No app found with this name</error>');
+        if (count($apps) < 0) {
+            $output->writeln('<error>No app(s) found</error>');
             return 1;
         }
 
-        $app = $apps->first();
-        $manifest = Manifest::createFromXmlFile($this->projectDir . '/custom/apps/' .$appName . '/manifest.xml');
-
-        $this->templatePersister->updateTemplates($manifest, $app->id, $context);
-        $this->templateStateService->activateAppTemplates($app->id, $context);
+        foreach ($apps as $app) {
+            $appName = $app->name;
+            $manifest = Manifest::createFromXmlFile($this->projectDir . '/custom/apps/' . $appName . '/manifest.xml');
+            $this->templatePersister->updateTemplates($manifest, $app->id, $context);
+            $this->templateStateService->activateAppTemplates($app->id, $context);
+        }
 
         return 1;
     }
